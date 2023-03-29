@@ -1,0 +1,19 @@
+name: OpenAI ChatGPT Code Review
+description: A GitHub Action that uses OpenAI ChatGPT to review code in pull request.
+inputs:
+  openai_token:
+    description: 'The API token for the OpenAI ChatGPT API.'
+    required: true
+  github_token:
+    description: 'The API token for the Github API.'
+    required: true
+  github_pull_request_id:
+    description: 'Github Pull Request ID'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.openai_token }}
+    - ${{ inputs.github_token }}
+    - ${{ inputs.github_pull_request_id }}
