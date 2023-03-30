@@ -71,8 +71,10 @@ def run():
             pull_request.create_issue_comment(
                 f"ChatGPT コードレビュー: ``{file_name}``\n\n {response['choices'][0]['message']['content']}")
         except Exception as e:
-            raise Exception(e)
-            
+            print(str(e))
+            pull_request.create_issue_comment(
+                f"ChatGPT コードレビュー: ``{file_name}``\n\n 分析できませんでした")
+
 
 if __name__ == '__main__':
     run()
