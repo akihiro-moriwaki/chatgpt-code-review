@@ -10,7 +10,7 @@ on:
     types: [ opened, synchronize ]
 
 jobs:
-  hello_world_job:
+  chatgpt_review_job:
     runs-on: ubuntu-latest
     name: ChatGPT
     steps:
