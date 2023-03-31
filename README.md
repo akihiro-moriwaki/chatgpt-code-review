@@ -15,7 +15,7 @@ jobs:
     name: ChatGPT
     steps:
       - name: ChatGPT code review
-        uses: akihiro-moriwaki/chatgpt-code-review@v0.0.1
+        uses: akihiro-moriwaki/chatgpt-code-review@v0.0.3
         with:
           openai_token: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.PERSONAL_TOKEN }}
