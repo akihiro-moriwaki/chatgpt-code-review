@@ -14,6 +14,7 @@ args = parser.parse_args()
 openai.api_key = args.openai_api_key
 github = Github(args.github_token)
 repo_str = os.getenv('GITHUB_REPOSITORY')
+ignore_phrases = ['改善なし', '改善点なし', '改善点はありません']
 
 
 def get_content_patch() -> str:
@@ -29,8 +30,13 @@ def get_content_patch() -> str:
     return response.text
 
 
-def is_binary(text) -> bool:
+def is_binary(text: str) -> bool:
     return 'Binary' in text
+
+
+def is_ignore_message(message: str) -> bool:
+    contains_phrases = [phrase in message for phrase in ignore_phrases]
+    return True in contains_phrases
 
 
 def run():
@@ -57,7 +63,11 @@ def run():
             messages = [
                 {
                     'role': 'user',
-                    'content': '次のコードのレビューをお願いします',
+                    'content': '次のコードのレビューをお願いします\n'
+                               '# レビュー条件\n'
+                               '- 改善点だけ教えてください\n'
+                               '- 指摘事項は箇条書きかコードで教えてください\n'
+                               '- 改善点がない場合は、"改善点なし"と知らせてください\n',
                 },
                 {
                     'role': 'user',
@@ -68,6 +78,8 @@ def run():
                 model='gpt-3.5-turbo',
                 messages=messages,
             )
+            if is_ignore_message(response['choices'][0]['message']['content']):
+                continue
             pull_request.create_issue_comment(
                 f"ChatGPT コードレビュー: ``{file_name}``\n\n {response['choices'][0]['message']['content']}")
         except Exception as e:
