@@ -14,7 +14,7 @@ args = parser.parse_args()
 openai.api_key = args.openai_api_key
 github = Github(args.github_token)
 repo_str = os.getenv('GITHUB_REPOSITORY')
-ignore_phrases = ['改善なし', '改善点なし', '改善点はありません']
+ignore_phrases = ['特にありません', '改善なし', '改善点なし', '改善点はありません', '改善点は見当たりません', '改善点は見受けられません']
 
 
 def get_content_patch() -> str:
